@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/dbuscores" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mappingResources">
+			<list>
+				<value>co/edu/udea/iw/mapping/Usuario.hbm.xml</value>
+				<value>co/edu/udea/iw/mapping/Torneo.hbm.xml</value>
+				<value>co/edu/udea/iw/mapping/Equipo.hbm.xml</value>
+				<value>co/edu/udea/iw/mapping/Partido.hbm.xml</value>
+				<value>co/edu/udea/iw/mapping/TorneoFavorito.hbm.xml</value> 
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<!--prop key="hibernate.current_session_context_class">thread</prop-->
+			</props>
+		</property>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+
+	<bean id="usuarioDaoImpl" class="co.edu.udea.iw.Dao.Implement.UsuarioDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<bean id="torneoDaoImpl" class="co.edu.udea.iw.Dao.Implement.TorneoDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<bean id="equipoDaoImpl" class="co.edu.udea.iw.Dao.Implement.EquipoDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<bean id="partidoDaoImpl" class="co.edu.udea.iw.Dao.Implement.PartidoDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<bean id="partidofavoritoDaoImpl" class="co.edu.udea.iw.Dao.Implement.TorneoFavoritoDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<bean id="usuarioBLImpl" class="co.edu.udea.iw.BL.Impl.UsuarioBLImpl"></bean>
+	<bean id="partidoBLImpl" class="co.edu.udea.iw.BL.Impl.PartidoBLImpl"></bean>
+	<bean id="torneoBLImpl" class="co.edu.udea.iw.BL.Impl.TorneoBLImpl"></bean>
+	<bean id="equipoBLImpl" class="co.edu.udea.iw.BL.Impl.EquipoBLImpl"></bean>
+	<bean id="torneoFavoritoBLImpl" class="co.edu.udea.iw.BL.Impl.TorneoFavoritoBLImpl"></bean>
+	
+<!-- 	<tx:annotation-driven/> -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<context:component-scan base-package="co.edu.udea.iw.rest"></context:component-scan>
+	
+</beans>

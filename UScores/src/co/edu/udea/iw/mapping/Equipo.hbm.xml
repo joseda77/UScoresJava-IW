@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="co.edu.udea.iw.dto.Equipo" table="equipo">
+        <id name="codigo" type="java.lang.String">
+            <column name="CODIGO" />
+            <generator class="assigned" />
+        </id>
+        <property name="nombre" type="java.lang.String">
+            <column name="NOMBRE" />
+        </property>
+        <property name="fase" type="java.lang.String">
+            <column name="FASE" />
+        </property>
+        <property name="puntaje" type="java.lang.String">
+            <column name="PUNTAJE" />
+        </property>
+        <many-to-one name="torneo" class="co.edu.udea.iw.dto.Torneo" fetch="join">
+            <column name="TORNEO" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>
