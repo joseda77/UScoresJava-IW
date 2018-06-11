@@ -54,7 +54,8 @@ public class TorneoFavoritoService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public JSONObject CrearTorneo(@QueryParam("usuario") String usuario,JSONObject json) throws RemoteException, JSONException {
 		TorneoFavorito torneoAux= null;
-		String torneo = json.getString("torneo");
+		System.out.println(json);
+		String torneo = json.getString("codigo");
 		JSONObject jsonRes = new JSONObject();
 		try {
 			Torneo torn = torneoBL.obtener(torneo);
@@ -63,9 +64,11 @@ public class TorneoFavoritoService {
 			torneoAux.setTorneo(torn);
 			Usuario user = dao.ObtenerUsuario(usuario);
 			torneoFavoritoBL.agregarTorneoFavorito(torneoAux);
-			jsonRes.append("Message","Torneo agregado correctamente");
+			jsonRes.put("Message","Torneo agregado correctamente");
 		} catch (MyException e) {
 			System.out.println("El error es" + e.getCause().getMessage());
+			jsonRes.put("Message", e.getCause().getMessage());
+			return jsonRes;
 		}
 		return jsonRes;
 	}
@@ -89,10 +92,11 @@ public class TorneoFavoritoService {
 			}
 			System.out.println("CONTIENE ALGO"+torneo);
 			torneoFavoritoBL.eliminar(torneo);
-			jsonRes.append("Message", "Torneo Favorito eliminado");
+			jsonRes.put("Message", "Torneo Favorito eliminado");
 		} catch (MyException e) {
-			jsonRes.append("Message", "Error al eliminar torneo");
+			jsonRes.put("Message", "Error al eliminar torneo");
 			System.out.println(e.getCause().getMessage());
+			return jsonRes;
 		}
 		return jsonRes;
 	}
